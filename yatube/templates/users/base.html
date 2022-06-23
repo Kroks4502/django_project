@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
-
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 p-5">
-      <div class="card">
-        <div class="card-header">{% block card-header %}...{% endblock %}</div>
-        <div class="card-body">
-          {% block card-body %}...{% endblock %}
+  <style>
+    body {
+      background-image: url('/static/img/not uses/photo_2022-06-23_13-40-32.jpg');
+      background-position: center;
+      background-size: cover;
+      background-position-y: 0;
+    }
+  </style>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-10 col-sm-9 col-md-7 col-lg-5 col-xl-4 p-5">
+        <div class="card shadow-lg">
+          <div class="card-header">{% block card-header %}...{% endblock %}</div>
+          <div class="card-body">
+            {% block card-body %}...{% endblock %}
+          </div>
         </div>
       </div>
     </div>

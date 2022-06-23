@@ -1,26 +1,26 @@
 {% load static %}
 {% load cache %}
-
-
-
-<script src="https://getbootstrap.com/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-
-
-
-<nav class="navbar nav-pills navbar-expand-lg bg-light rounded" style="background-color: lightskyblue">
-  <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasLg" aria-controls="navbarOffcanvasLg">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="container-fluid collapse navbar-collapse" id="navbarNavDropdown">
-    {% with request.resolver_match.view_name as view_name %}
-      <a class="navbar-brand" href="{% url 'posts:index' %}">
+<nav class="navbar navbar-expand-lg navbar-pills bg-light rounded" aria-label="Offcanvas navbar large">
+    <div class="container-fluid">
+      <a class="navbar-brand flex-shrink" href="{% url 'posts:index' %}">
         <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
         <span style="color:red">Ya</span>tube
       </a>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbar2Label">The Game Has Begun</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          {% with request.resolver_match.view_name as view_name %}
+            <ul class="navbar-nav pe-3 me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link{% if view_name  == 'about:author' %} active{% endif %}"
-             href="{% url 'about:author' %}">Об авторе</a>
+             href="{% url 'about:author'%}#main">Об авторе</a>
         </li>
         <li class="nav-item">
           <a class="nav-link{% if view_name  == 'about:tech' %} active{% endif %}"
@@ -85,7 +85,7 @@
           {% endif %}
         {% endif %}
       </ul>
-      <ul class="navbar-nav mb-2 mb-lg-0">
+            <ul class="navbar-nav pe-3 mb-2 mb-lg-0">
         {% if user.is_authenticated %}
 
           <li class="nav-item">
@@ -135,6 +135,8 @@
           </li>
         {% endif %}
       </ul>
-    {% endwith %}
-  </div>
+          {% endwith %}
+        </div>
+      </div>
+    </div>
 </nav>
