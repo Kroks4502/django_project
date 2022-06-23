@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ page_name }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>{{ page_name }}</h1>
+  <div class="col-md-9 list-group my-3 w-auto">
+    {% for group in groups %}
+    {% if group.groups.all %}
+      <a href="{% url 'posts:group_list' group.slug %}" class="list-group-item list-group-item-action d-flex py-3" aria-current="true">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <div>
+            <h6 class="mb-0">{{ group.title }}</h6>
+            <p class="mb-0 opacity-75">{{ group.description }}</p>
+          </div>
+          <small class="opacity-50 text-nowrap">{{ group.groups.all|length }}</small>
+        </div>
+      </a>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

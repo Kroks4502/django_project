@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ page_name }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1>{{ page_name }}</h1>
+  <div class="col-md-9 list-group my-3 w-auto">
+    {% for author in authors %}
+      {% if author.posts.all %}
+        <a href="{% url 'posts:profile' author.username %}" class="list-group-item list-group-item-action d-flex py-3" aria-current="true">
+          <div class="d-flex gap-3 w-100 justify-content-between">
+            <div>
+              <h6 class="mb-0">
+                {% if author.full_name %}
+                  {{ author.full_name }}
+                {% else %}
+                  {{ author.username }}
+                {% endif %}
+              </h6>
+              <p class="mb-0 opacity-75">Подписчиков: {{ author.following.all|length }}</p>
+            </div>
+            <small class="opacity-50 text-nowrap">{{ author.posts.all|length }}</small>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% load static %}
+{% load cache %}
+
+
+
+<script src="https://getbootstrap.com/docs/5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+
+
+<nav class="navbar nav-pills navbar-expand-lg bg-light rounded" style="background-color: lightskyblue">
+  <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasLg" aria-controls="navbarOffcanvasLg">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="container-fluid collapse navbar-collapse" id="navbarNavDropdown">
+    {% with request.resolver_match.view_name as view_name %}
+      <a class="navbar-brand" href="{% url 'posts:index' %}">
+        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+        <span style="color:red">Ya</span>tube
+      </a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link{% if view_name  == 'about:author' %} active{% endif %}"
+             href="{% url 'about:author' %}">Об авторе</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if view_name  == 'about:tech' %} active{% endif %}"
+             href="{% url 'about:tech' %}">Технологии</a>
+        </li>
+        {% if menu_group_lists|length > 0 %}
+          {% if menu_group_lists|length < 10 %}
+            {% cache 600 menu-groups %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarGroups" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  Группы
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  {% for group in menu_group_lists %}
+                  <li><a class="dropdown-item" href="{% url 'posts:group_list' group.slug %}">
+                    {{ group.title }}
+                  </a></li>
+                  {% endfor %}
+                  <li><a class="dropdown-item" href="{% url 'posts:groups' %}">
+                    Все группы
+                  </a></li>
+                </ul>
+              </li>
+            {% endcache %}
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link{% if view_name  == 'posts:group_detail' %} active{% endif %}"
+                 href="{% url 'posts:groups' %}">Группы</a>
+            </li>
+          {% endif %}
+        {% endif %}
+        {% if menu_author_lists|length > 0 %}
+          {% if menu_author_lists|length < 10 %}
+            {% cache 600 menu-authors %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarAuthors" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  Авторы
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  {% for author in menu_author_lists %}
+                  <li><a class="dropdown-item" href="{% url 'posts:profile' author.username  %}">
+                    {% if author.full_name %}
+                      {{ author.full_name }}
+                    {% else %}
+                      {{ author.username }}
+                    {% endif %}
+                  </a></li>
+                  {% endfor %}
+                  <li><a class="dropdown-item" href="{% url 'posts:authors' %}">
+                    Все авторы
+                  </a></li>
+                </ul>
+              </li>
+            {% endcache %}
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link{% if view_name  == 'posts:authors' %} active{% endif %}"
+                 href="{% url 'posts:authors' %}">Авторы</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      </ul>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link{% if view_name  == 'posts:post_create' %} active{% endif %}"
+               href="{% url 'posts:post_create' %}">Новая запись</a>
+          </li>
+          {% if user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link"
+                 href="{% url 'admin:index' %}">Панель управления</a>
+            </li>
+          {% endif %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                <a class="dropdown-item"
+                   href="{% url 'posts:profile' user.username %}">
+                  Мои записи
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   href="{% url 'users:password_change_form' %}">
+                  Изменить пароль
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   href="{% url 'users:logout' %}">
+                  Выйти
+                </a>
+              </li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link{% if view_name  == 'users:login' %} active{% endif %}"
+               href="{% url 'users:login' %}">Войти</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link{% if view_name  == 'users:signup' %} active{% endif %}"
+               href="{% url 'users:signup' %}">Регистрация</a>
+          </li>
+        {% endif %}
+      </ul>
+    {% endwith %}
+  </div>
+</nav>

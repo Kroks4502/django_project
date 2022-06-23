@@ -1,0 +1,9 @@
+{% extends "core/base_errors.html" %}
+{% block title %}500 Internal Server Error{% endblock %}
+{% block card-header %}
+  500 Internal Server Error
+{% endblock %}
+{% block card-body %}
+  <p>500 Internal Server Error</p>
+  <a href="{% url 'posts:index' %}">Перейти на главную</a>
+{% endblock %}

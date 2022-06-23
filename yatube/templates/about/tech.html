@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+  <div class="px-5 py-3 my-5 text-center">
+      <svg class="bi text-muted flex-shrink-0 me-3" width="10em" height="10em">
+        <use xlink:href="#code-slash"></use>
+      </svg>
+      <h1 class="display-5 fw-bold">Технологии нашего проекта</h1>
+      <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">
+              Наш мало кому известный проект использует следующие технологии
+          </p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <a class="btn btn-primary btn-lg px-4" href="https://www.python.org/" target="_blank">Python</a>
+              <a class="btn btn-info btn-lg px-4 gap-3" href="https://www.djangoproject.com/" target="_blank">Django</a>
+              <a class="btn btn-outline-secondary btn-lg px-4" href="https://getbootstrap.com/" target="_blank">Bootstrap</a>
+              <a class="btn btn-outline-secondary btn-lg px-4" href="https://fontawesome.com/" target="_blank">Font Awesome</a>
+          </div>
+      </div>
+  </div>
+{% endblock %}
