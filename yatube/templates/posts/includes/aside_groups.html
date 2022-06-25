@@ -1,0 +1,16 @@
+{% for group in menu_group_lists %}
+  {% with request.resolver_match.kwargs.slug as slug %}
+    {% if group.slug not in slug %}
+      <div class="card">
+        <div class="header">
+          <h2>{{ group.title }}</h2>
+        </div>
+        <div class="body">
+          {{ group.description|truncatechars:300 }}<br>
+          <a href="{% url 'posts:group_list' group.slug %}"
+             class="btn btn-outline-secondary mt-3">Публикации группы</a>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endfor %}

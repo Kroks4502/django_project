@@ -1,55 +1,62 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
 {% block title %}
-  Пост {{ post.text|truncatechars:30 }}
+Пост {{ post.text|truncatechars:30 }}
 {% endblock %}
 {% block content %}
-  <div class="container py-5">
-    <div class="row">
-      <article class="col-12 col-md-9">
-        {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-          <img class="card-img my-2" src="{{ im.url }}">
-        {% endthumbnail %}
-        <p>
-          {{ post.text|linebreaksbr }}
-        </p>
+<div id="main-content" class="container py-4 py-xl-5 blog-page">
+  <div class="container">
+    <div class="row clearfix">
+      <article class="col-lg-8 col-md-12 left-box">
+        <div class="card single_post">
+          <div class="body">
+            {% if post.image %}
+            <div class="img-post">
+              {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+              <img class="d-block img-fluid" src="{{ im.url }}">
+              {% endthumbnail %}
+            </div>
+            {% endif %}
+            <h3>{{ post.title }}</h3>
+            <p>
+              {{ post.text|linebreaksbr }}
+            </p>
+          </div>
+        </div>
         {% include 'posts/includes/comments.html' %}
       </article>
-      <aside class="col-12 col-md-3">
-        {% spaceless %}
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            Дата публикации: <span>{{ post.pub_date|date:'d E Y' }}</span>
-          </li>
-          {% if post.group %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Группа:
-              <a href="{% url 'posts:group_list' post.group.slug %}">
-                {{ post.group }}
-              </a>
-            </li>
-          {% endif %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            Автор:
-            <a href="{% url 'posts:profile' post.author.username %}">
-              {% if post.author.get_full_name %}
-                {{ post.author.get_full_name }}
-              {% else %}
-                {{ post.author.username }}
-              {% endif %}
-            </a>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            Всего постов автора: <span>{{ post.author.posts.count }}</span>
-          </li>
-          {% if user == post.author %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <a href="{% url 'posts:post_delete' post.pk %}" class="btn btn-danger">Удалить</a><a href="{% url 'posts:post_edit' post.id %}" class="btn btn-primary">Редактировать</a>
-            </li>
-          {% endif %}
-        </ul>
-      {% endspaceless %}
+
+      <aside class="col-lg-4 col-md-12 right-box">
+        <div class="card">
+          <div class="header pb-3">
+            <h2>{{ post.pub_date|date:'d E Y' }}</h2>
+          </div>
+        </div>
+        <div class="card">
+          <div class="header">
+            <h2>{% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}
+              {{ post.author.username }}{% endif %}</h2>
+          </div>
+          <div class="body">
+            Количество публикаций: {{ post.author.posts.count }}<br>
+            <a href="{% url 'posts:profile' post.author.username %}"
+               class="btn btn-outline-secondary mt-3">Страница автора</a>
+          </div>
+        </div>
+        {% if post.group %}
+        <div class="card">
+          <div class="header">
+            <h2>{{ post.group.title }}</h2>
+          </div>
+          <div class="body">
+            {{ post.group.description }}<br>
+            <a href="{% url 'posts:group_list' post.group.slug %}"
+               class="btn btn-outline-secondary mt-3">Публикации группы</a>
+          </div>
+        </div>
+        {% endif %}
       </aside>
     </div>
   </div>
+</div>
 {% endblock %}

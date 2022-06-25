@@ -1,19 +1,63 @@
 {% extends 'base.html' %}
 {% load cache %}
+{% load thumbnail %}
 {% block title %}{{ page_name }}{% endblock %}
 {% block content %}
-  <div class="container">
-    {% include 'posts/includes/switcher.html' %}
-    <h1>{{ page_name }}</h1>
-    {% cache 20 index_page page_obj.number %}
-      {% for post in page_obj %}
-        {% include 'posts/includes/article.html' %}
-        {% if not forloop.last %}
-          <hr>
-        {% endif %}
+  {% with request.GET.page as slug %}
+{{ slug }}
+{% endwith %}
+{% if posts_with_img %}
+  <div id="main" class="carousel slide vh-100" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#main" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#main" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+      <button type="button" data-bs-target="#main" data-bs-slide-to="2" aria-label="Slide 3" class="active" aria-current="true"></button>
+    </div>
+    <div class="carousel-inner">
+      {% for post in posts_with_img %}
+        <div class="carousel-item{% cycle '' ' active' '' %} ">
+          {% thumbnail post.image "1920x1080" crop="center" upscale=True as im %}
+          <img src="{{ im.url }}" class="d-block position-relative top-50 start-50{% cycle '' ' translate-middle' '' %} min-vw-100 min-vh-100" style="transform: translate(-50%,-50%)!important;">
+          {% endthumbnail %}
+          <div class="container">
+            <div class="carousel-caption text-start">
+              <h1>{{ post.title }}</h1>
+              <p>{{ post.text|truncatechars:200 }}</p>
+              <p><a class="btn btn-lg btn-outline-secondary" href="{% url 'posts:post_detail' post.pk %}">Читать</a></p>
+            </div>
+          </div>
+        </div>
       {% endfor %}
-      {% include 'posts/includes/paginator.html' %}
-    {% endcache %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#main" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Предыдущий</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#main" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Следующий</span>
+    </button>
   </div>
-{{author_lists}}
+{% endif %}
+<div id="main-content" class="container py-4 py-xl-5 blog-page">
+  <div class="container">
+    <div class="row clearfix">
+      {% cache 1 index_page page_obj.number %}
+      <div class="col-lg-8 col-md-12 left-box">
+
+        <h1 class="ps-4 pb-4">{{ page_name }}</h1>
+
+        {% for post in page_obj %}
+        {% include 'posts/includes/article.html' %}
+        {% endfor %}
+      </div>
+      <aside class="col-lg-4 col-md-12 right-box">
+        {% include 'posts/includes/switcher.html' %}
+        {% include 'posts/includes/aside_groups.html' %}
+      </aside>
+      {% include 'posts/includes/paginator.html' %}
+      {% endcache %}
+    </div>
+  </div>
+</div>
 {% endblock %}

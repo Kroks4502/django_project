@@ -1,33 +1,47 @@
 {% load user_filters %}
+{% with post.comments.all as comments %}
+{% if comments %}
+<div class="card comment">
+  <div class="header">
+    <h2>Комментарии</h2>
+  </div>
+  <div class="body">
+    <ul class="comment-reply list-unstyled">
+      {% for comment in comments %}
+      <li class="row clearfix">
+        <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail"
+                                                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                                  alt="Awesome Image"></div>
+        <div class="text-box col-md-10 col-8 p-l-0 p-r0">
+          <h5 class="m-b-0"><a href="{% url 'posts:profile' comment.author.username %}">
+            {{ comment.author.username }}
+          </a></h5>
+          <p>{{ comment.text }}</p>
+          <ul class="list-inline">
+            <li><a href="#">{{ comment.created }}</a></li>
+          </ul>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+{% endwith %}
 
 {% if user.is_authenticated %}
-  <div class="card comment my-4">
-    <h5 class="card-header">Добавить комментарий:</h5>
-    <div class="card-body">
-      <form method="post" action="{% url 'posts:add_comment' post.id %}">
-        {% csrf_token %}
-        <div class="form-group mb-2">
-          {{ form.text|addclass:"form-control" }}
-        </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
-      </form>
-    </div>
+<div class="card comment">
+  <div class="header">
+    <h2>Добавить комментарий</h2>
   </div>
-{% endif %}
-
-{% with post.comments.all as comments %}
-  {% for comment in comments %}
-    <div class="media mb-4">
-      <div class="media-body">
-        <h5 class="mt-0">
-          <a href="{% url 'posts:profile' comment.author.username %}">
-            {{ comment.author.username }}
-          </a>
-        </h5>
-          <p>
-           {{ comment.text }}
-          </p>
-        </div>
+  <div class="body">
+    <form method="post" action="{% url 'posts:add_comment' post.id %}">
+      {% csrf_token %}
+      <div class="form-group mb-2">
+        {{ form.text|addclass:"form-control" }}
       </div>
-  {% endfor %}
-{% endwith %}
+      <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+  </div>
+</div>
+{% endif %}

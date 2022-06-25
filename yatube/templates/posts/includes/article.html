@@ -1,25 +1,36 @@
 {% load thumbnail %}
-<article class="blog-post">
-  <p class="blog-post-meta">
-    {% with request.resolver_match.view_name as view_name %}
+<article class="card single_post">
+  <div class="body">
+    {% if post.image %}
+    <div class="img-post">
+      {% thumbnail post.image "960x340" crop="center" upscale=True as im %}
+      <img class="d-block img-fluid" src="{{ im.url }}">
+      {% endthumbnail %}
+    </div>
+    {% endif %}
+    <h3><a href="{% url 'posts:post_detail' post.pk %}">{{ post.title }}</a></h3>
+    <p>
+      {{ post.text|linebreaksbr|truncatechars:250 }}
+      {% if post.text|length > 250 %}
+      <a href="{% url 'posts:post_detail' post.pk %}">Читать дальше...</a>
+      {% endif %}
+    </p>
+    <p class="blog-post-meta mt-2 border-top fs-6 fw-light">
+      {% with request.resolver_match.view_name as view_name %}
       Дата публикации: {{ post.pub_date|date:'d E Y' }}
       {% if post.group and view_name not in 'posts:group_list' %}
-        &nbsp; Группа: <a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
+      &nbsp; Группа: <a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
       {% endif %}
       {% if view_name not in 'posts:profile' %}
-        &nbsp; Автор:
-        <a href="{% url 'posts:profile' post.author.username %}">
-          {% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}
-            {{ post.author.username }}{% endif %}</a>
+      &nbsp; Автор:
+      <a href="{% url 'posts:profile' post.author.username %}" class="link-secondary">
+        {% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}
+        {{ post.author.username }}{% endif %}</a>
       {% endif %}
-        &nbsp; <a href="{% url 'posts:post_detail' post.pk %}" class="link-secondary">Открыть</a>
       {% if user == post.author %}
-        &nbsp; <a href="{% url 'posts:post_edit' post.id %}" class="link-secondary">Редактировать</a>
+      &nbsp; <a href="{% url 'posts:post_edit' post.id %}" class="link-secondary">Редактировать</a>
       {% endif %}
-    {% endwith %}
-  </p>
-  {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-    <img class="card-img my-2" src="{{ im.url }}">
-  {% endthumbnail %}
-  <p>{{ post.text|linebreaksbr }}</p>
+      {% endwith %}
+    </p>
+  </div>
 </article>

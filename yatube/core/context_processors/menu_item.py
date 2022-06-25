@@ -9,8 +9,7 @@ def group_lists(request):
     groups = []
     for group in group_model.objects.all():
         if post_model.objects.filter(group__pk=group.pk).count():
-            groups.append({'title': group.title,
-                           'slug': group.slug})
+            groups.append(group)
     return {
         'menu_group_lists': groups
     }

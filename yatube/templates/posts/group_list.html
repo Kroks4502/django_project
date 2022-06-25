@@ -1,15 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}{{ group }}{% endblock %}
 {% block content %}
-  <div class="container py-5">
-    <h1>{{ group }}</h1>
-    <p>{{ group.description|truncatechars:200 }}</p>
-    {% for post in page_obj %}
-      {% include 'posts/includes/article.html' %}
-      {% if not forloop.last %}
-        <hr>
-      {% endif %}
-    {% endfor %}
-    {% include 'posts/includes/paginator.html' %}
+<div id="main-content" class="container py-4 py-xl-5 blog-page">
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-lg-8 col-md-12 left-box">
+        <div class="card">
+          <div class="header">
+            <h1>{{ group }}</h1>
+          </div>
+          <div class="body">
+            {{ group.description|truncatechars:300 }}
+          </div>
+        </div>
+        {% for post in page_obj %}
+          {% include 'posts/includes/article.html' %}
+        {% endfor %}
+      </div>
+      <aside class="col-lg-4 col-md-12 right-box">
+        {% include 'posts/includes/aside_groups.html' %}
+      </aside>
+      {% include 'posts/includes/paginator.html' %}
+    </div>
   </div>
+</div>
 {% endblock %}

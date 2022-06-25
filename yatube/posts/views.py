@@ -1,4 +1,7 @@
-from django.contrib.auth.decorators import login_required
+import os.path
+import random
+
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.paginator import Paginator
 from django.db.models import QuerySet
@@ -38,7 +41,14 @@ def index(request):
     page_name = 'Последние обновления на сайте'
 
     post_list = Post.objects.all()
-    additional_context = {'page_name': page_name, }
+    posts_with_img = []
+    for post in post_list:
+        if post.image:
+            posts_with_img.append(post)
+        if len(posts_with_img) == 3:
+            break
+    additional_context = {'page_name': page_name,
+                          'posts_with_img': posts_with_img}
 
     return render_page_with_paginator(request, template,
                                       post_list, additional_context)
@@ -72,7 +82,7 @@ def profile(request, username):
 @login_required
 def follow_index(request):
     template = 'posts/follow.html'
-    page_name = 'Последние публикации избранных авторов'
+    page_name = 'Публикации избранных авторов'
 
     following = request.user.follower.values_list('author')
     post_list = Post.objects.filter(author__pk__in=following)

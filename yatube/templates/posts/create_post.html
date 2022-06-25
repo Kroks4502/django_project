@@ -1,51 +1,62 @@
 {% extends 'base.html' %}
 {% load user_filters %}
 {% block title %}
-  {% if is_edit %}Редактировать запись{% else %}Добавить запись{% endif %}
+{% if is_edit %}Редактировать запись{% else %}Добавить запись{% endif %}
 {% endblock %}
 {% block content %}
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8 p-5">
-        <div class="card">
-          <div class="card-header">
-            {% if is_edit %}
-              Редактировать запись
-            {% else %}
-              Добавить запись
-            {% endif %}
-          </div>
-          <div class="card-body">
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {% for field in form %}
-                <div class="form-group row my-3"
-                     {% if field.field.required %}aria-required="true"
-                     {% else %}aria-required="false"{% endif %}>
-                  <label for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                    {% if field.field.required %}
-                      <span class="required text-danger">*</span>
-                    {% endif %}
-                  </label>
-                  {{ field|addclass:'form-control' }}
-                  {% if field.help_text %}
-                    <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                      {{ field.help_text|safe }}
-                    </small>
-                  {% endif %}
-                </div>
-              {% endfor %}
-              <div class="d-flex justify-content-end">
-                {% if is_edit %}<a href="{% url 'posts:post_delete' post.pk %}" class="btn btn-danger mx-2">Удалить</a>{% endif %}
-                <button type="submit" class="btn btn-primary">
-                  {% if is_edit %}Сохранить{% else %}Добавить{% endif %}
-                </button>
-              </div>
-            </form>
-          </div>
+<style>
+    body {
+      background-image: url('/static/img/not uses/photo_2022-06-23_13-40-32.jpg');
+      background-position: center;
+      background-size: cover;
+      background-position-y: 0;
+    }
+
+</style>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-11 col-lg-10 col-xl-8 p-5">
+      <div class="card shadow-lg">
+        <div class="card-header">
+          {% if is_edit %}
+          Редактировать запись
+          {% else %}
+          Добавить запись
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group"
+                 {% if field.field.required %}aria-required="true"
+                 {% else %}aria-required="false" {% endif %}>
+              <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {% if field.field.required %}
+                <span class="required text-danger">*</span>
+                {% endif %}
+              </label>
+              {{ field|addclass:'form-control' }}
+              {% if field.help_text %}
+              <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                {{ field.help_text|safe }}
+              </small>
+              {% endif %}
+            </div>
+            {% endfor %}
+            <div class="d-flex justify-content-end">
+              {% if is_edit %}
+              <a href="{% url 'posts:post_delete' post.pk %}"
+                 class="btn btn-danger mx-2">Удалить</a>{% endif %}
+              <button type="submit" class="btn btn-primary">
+                {% if is_edit %}Сохранить{% else %}Добавить{% endif %}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}

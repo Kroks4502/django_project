@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}{{ page_name }}{% endblock %}
 {% block content %}
+<div id="main-content" class="container py-4 py-xl-5 blog-page">
   <div class="container">
-    {% include 'posts/includes/switcher.html' %}
-    <h1>{{ page_name }}</h1>
-      {% for post in page_obj %}
-        {% include 'posts/includes/article.html' %}
-        {% if not forloop.last %}
-          <hr>
-        {% endif %}
+    <div class="row clearfix">
+      <div class="col-lg-8 col-md-12 left-box">
+        <h1 class="ps-4 pb-4">{{ page_name }}</h1>
+        {% for post in page_obj %}
+          {% include 'posts/includes/article.html' %}
       {% empty %}
       <div class="alert alert-primary d-flex align-items-center" role="alert">
           <i class="fas fa-info" style="margin-right: 10px"></i>
@@ -20,7 +19,14 @@
       <div class="mb-5">
           <a href="{% url 'posts:index' %}" class="btn btn-lg btn-primary">На главную</a>
       </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
+      <aside class="col-lg-4 col-md-12 right-box">
+        {% include 'posts/includes/switcher.html' %}
+        {% include 'posts/includes/aside_groups.html' %}
+      </aside>
       {% include 'posts/includes/paginator.html' %}
+    </div>
   </div>
+</div>
 {% endblock %}
