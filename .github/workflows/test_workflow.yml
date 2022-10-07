@@ -38,4 +38,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO_USER }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: ${{ github.repository + github.workflow }} успешно выполнен!
+          message: ${{ github.repository }} ${{ github.workflow }} успешно выполнен!
