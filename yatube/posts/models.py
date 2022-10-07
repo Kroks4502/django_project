@@ -57,6 +57,7 @@ class Post(models.Model):
     image = models.ImageField(
         'Изображение',
         upload_to='posts/',
+        null=True,
         blank=True,
         help_text='Выберите изображение',
     )
